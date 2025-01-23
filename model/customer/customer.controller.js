@@ -2,7 +2,7 @@ const user = require("./customer.model");
 
 exports.createCustomer = async (req, res) => {
   try {
-    const { name, email, password, address } = req.body;
+    const { name, email, password, address, role } = req.body;
     const existingCustomer = await user.findOne({ name });
     if (existingCustomer) {
       return res.status(401).json("Customer Already Exist");
@@ -12,10 +12,14 @@ exports.createCustomer = async (req, res) => {
       email,
       password,
       address,
+      role,
     });
-    customerData.save();
-    res.staus(201).json("Customer Profile Added Successfully!");
+    await customerData.save();
+    res.status(201).json({ success: true, message: "Category Added" });
   } catch (error) {
-    res.status(401).json("Internal Server Error");
+    console.log(error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+// exports.getCustomer
